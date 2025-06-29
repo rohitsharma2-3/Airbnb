@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const Update = () => {
     let { id } = useParams()
+    let navigate = useNavigate()
 
     const [inputData, setInputData] = useState({
         title: '',
@@ -28,7 +29,7 @@ const Update = () => {
         e.preventDefault()
         console.log(inputData)
 
-        axios.put(`http://localhost:4000/update/${id}`, inputData)
+        axios.put(`http://localhost:4000/verifiedvilla/update/${id}`, inputData)
             .then((res) => {
                 console.log(res.data)
                 setInputData({
@@ -39,7 +40,13 @@ const Update = () => {
                     country: '',
                     price: '',
                 })
-                window.location.href= `/details/${id}`
+                navigate(`/details/${id}`, {
+                    state: {
+                        showToast: true,
+                        message: '🎉 Listing updated successfully!',
+                    },
+                });
+
             })
             .catch((err) => {
                 console.log(err)

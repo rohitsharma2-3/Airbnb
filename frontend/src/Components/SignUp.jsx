@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
+  let navigate = useNavigate()
   const [login, setLogin] = useState('Login')
   const [formData, setFormData] = useState({
     name: '',
@@ -24,28 +26,61 @@ const SignUp = () => {
   }
 
   const signUpFun = async () => {
+    try {
+      const res = await fetch('http://localhost:4000/verifiedvilla/signup', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('auth-token', data.token);
+        navigate('/', {
+          state: {
+            showToast: true,
+            message: 'Welcome to VerifiedVilla'
+          }
+        })
+      } else {
+        alert(data.errors);
+      }
+
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
+
+  const loginFun = async () => {
     let respData;
-    await fetch('http://localhost:4000/verifiedvilla/signup', {
+    await fetch('http://localhost:4000/verifiedvilla/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-type': 'application/json'
       },
       body: JSON.stringify(formData)
+
     }).then((res) => res.json())
       .then((data) => respData = data)
 
     if (respData.success) {
       localStorage.setItem('auth-token', respData.token)
-      localStorage.setItem('username', formData.username)
-      window.location.replace('/')
+      navigate('/', {
+        state: {
+          showToast: true,
+          message: 'Welcome Back to VerifiedVilla'
+        }
+      })
     } else {
       alert(respData.error)
     }
-  }
-
-  const loginFun = async () => {
-   
   }
 
   return (

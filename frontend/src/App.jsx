@@ -7,10 +7,12 @@ import Create from './Components/Create'
 import SignUp from './Components/SignUp'
 import Details from './Components/Details'
 import Update from './Components/Update.jsx'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <>
       <div className='text-black'>
         <Navbar />
         <div className='min-h-[100vh]'>
@@ -25,7 +27,8 @@ const App = () => {
         </div>
         <Footer />
       </div>
-    </BrowserRouter>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
   )
 }
 

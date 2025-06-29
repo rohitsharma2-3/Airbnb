@@ -1,11 +1,14 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Review from './Review'
 import SeeReview from './SeeReview'
+import { toast } from 'react-toastify'
 
 const Details = () => {
+    let navigate = useNavigate()
+    let location = useLocation()
     let { id } = useParams();
     const [Listing, setListings] = useState(null);
 
@@ -23,11 +26,23 @@ const Details = () => {
         fetchListing();
     }, [id]);
 
+    useEffect(() => {
+        if (location.state?.showToast) {
+            toast.success(location.state.message || '🎉 Listing created successfully!')
+            window.history.replaceState({}, document.title)
+        }
+    }, [location])
+
     const deleteHandler = () => {
         axios.delete(`http://localhost:4000/verifiedvilla/delete/${id}`)
             .then((res) => {
                 setListings(res.data)
-                window.location.href = '/'
+                navigate('/', {
+                    state: {
+                        showToast: true,
+                        message: '🗑️ Listing deleted successfully!',
+                    },
+                });
             })
     }
 
@@ -59,7 +74,7 @@ const Details = () => {
                 </div>
                 {Listing && (
                     <>
-                        <Review  />
+                        <Review />
                         <SeeReview />
                     </>
                 )}

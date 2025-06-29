@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Rating } from '@mui/material';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Review = () => {
     let { id } = useParams()
+    let navigate = useNavigate()
     const [inputData, setInputData] = useState({
         review: '',
         rating: 0,
@@ -26,6 +27,12 @@ const Review = () => {
                 setInputData({
                     review: '',
                     rating: 0
+                })
+                navigate(`/details/${id}`, {
+                    state: {
+                        showToast: true,
+                        message: 'Review added successfully!'
+                    }
                 })
             })
             .catch((err) => {

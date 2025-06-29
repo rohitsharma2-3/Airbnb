@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
-
+    let navigate = useNavigate()
     const [openHambuger, setOpenHambuger] = useState(false)
 
     return (
@@ -29,7 +29,20 @@ const Navbar = () => {
                     {/* Login + Hamburger */}
                     <div className="flex items-center gap-4">
 
-                        <Link to="/login" className="rounded-md hidden md:flex bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm text-decoration-none">Login</Link>
+                        {localStorage.getItem('auth-token') ?
+                            <button className="rounded hidden md:flex bg-red-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm text-decoration-none" onClick={() => { localStorage.removeItem("auth-token");
+                                 navigate('/', {
+                                state: {
+                                    showToast: true,
+                                    message: 'Logout Successfully'
+                                }
+                            })}}>
+                                Logout
+                            </button>
+                            :
+                            <Link to="/login" className="rounded-md hidden md:flex bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm text-decoration-none">
+                                Login
+                            </Link>}
                         {/* Mobile Menu Button */}
                         <button onClick={() => setOpenHambuger(!openHambuger)} className="block md:hidden rounded-sm bg-gray-100 p-2 text-gray-600">
                             {openHambuger ? (

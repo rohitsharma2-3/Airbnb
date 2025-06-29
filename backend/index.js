@@ -20,6 +20,7 @@ const User = require('./Models/UserModel')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+app.use(express.json());
 app.use(cors())
 
 
@@ -45,7 +46,7 @@ app.post('/verifiedvilla/create', async (req, res) => {
 })
 
 // Update Listings
-app.put('/update/:id', async (req, res) => {
+app.put('/verifiedvilla/update/:id', async (req, res) => {
     let { id } = req.params
     const { title, description, price, image, location, country } = req.body
     const UpdListinng = await Listing.findByIdAndUpdate(id, {
@@ -128,6 +129,36 @@ app.post('/verifiedvilla/signup', async (req, res) => {
     res.json({ success: true, token });
 })
 
+app.post('/verifiedvilla/login', async (req, res) => {
+    let user = await User.findOne({
+        email: req.body.email
+    })
+
+    if (user) {
+        const passCompare = await bcrypt.compare(req.body.password, user.password);
+        if (passCompare) {
+            const data = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            const token = jwt.sign(data, process.env.JWT_SECRET)
+            res.json({ success: true, token })
+        } else {
+
+            res.json({
+                success: false,
+                errors: "Wrong password"
+            })
+        }
+    } else {
+        res.json({
+            success: false,
+            errors: 'Wrong email id'
+        })
+    }
+})
 
 app.listen(port, () => {
     console.log(`PORT is connected : http://localhost:${port}/VerifiedVilla`)

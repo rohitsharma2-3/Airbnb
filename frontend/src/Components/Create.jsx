@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const Create = () => {
+    const navigate = useNavigate();
     const [inputData, setInputData] = useState({
         title: '',
         description: '',
@@ -29,12 +31,18 @@ const Create = () => {
 
         axios.post(`http://localhost:4000/verifiedvilla/create`, inputData)
             .then((res) => {
-                console.log(res.data)
-                window.location.href = '/'
+                console.log(res.data);
+                navigate('/', {
+                    state: {
+                        showToast: true,
+                        message: '🎉 Listing created successfully!',
+                    },
+                });
             })
             .catch((err) => {
-                console.log('err ->', err)
-            })
+                console.log('err ->', err);
+                toast.error('🚨 Failed to create listing: ' + err.message);
+            });
 
         setInputData({
             title: '',
