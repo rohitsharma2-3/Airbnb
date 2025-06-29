@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs');
 
 const port = process.env.PORT || 4000
 const mongoDB = process.env.MONGODB_URL
@@ -94,6 +95,8 @@ app.get('/verifiedvilla/:id', async (req, res) => {
 })
 
 app.post('/verifiedvilla/signup', async (req, res) => {
+    const { name, email, password } = req.body;
+
     let check = await User.findOne({
         email: req.body.email,
     })
@@ -104,11 +107,15 @@ app.post('/verifiedvilla/signup', async (req, res) => {
             errors: 'exiting user found with same email!'
         })
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
+        name,
+        email,
+        password: hashedPassword,
     })
+
     await user.save()
 
     const data = {
@@ -118,7 +125,7 @@ app.post('/verifiedvilla/signup', async (req, res) => {
     }
 
     const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '7d' })
-    res.json({ success: true })
+    res.json({ success: true, token });
 })
 
 
