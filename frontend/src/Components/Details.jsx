@@ -55,6 +55,7 @@ const Details = () => {
             <div className="max-w-4xl mx-auto p-4 mt-12">
                 <h1 className="text-3xl font-bold">{Listing.title}</h1>
                 <img src={Listing.image.url} alt={Listing.title} className="rounded-lg mb-6 h-96 w-full object-cover" />
+                <h1>{Listing.owner?.name || "Unknown Owner"}</h1>
                 <p className="text-gray-600 mt-2">{Listing.description}</p>
                 <p className="mt-4 text-xl text-indigo-600 font-semibold">₹ {Listing.price} / night</p>
                 <p className="text-gray-500 mt-2">{Listing.location}, {Listing.country}</p>

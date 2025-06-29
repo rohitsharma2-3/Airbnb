@@ -22,8 +22,8 @@ const Navbar = () => {
 
                     {/* Nav Links */}
                     <nav className="hidden md:flex items-center gap-6 text-sm">
-                        <Link to="/" className="text-black hover:text-amber-100 text-decoration-none" onClick={() => window.scroll({ top: 0 })}>Listings</Link>
-                        <Link to="/create" className="text-black hover:text-amber-100 text-decoration-none" onClick={() => window.scroll({ top: 0 })}>Create</Link>
+                        <Link to="/" className="text-black text-decoration-none fw-bold" onClick={() => window.scroll({ top: 0 })}>Listings</Link>
+                        <Link to="/create" className="text-black text-decoration-none fw-bold" onClick={() => window.scroll({ top: 0 })}>Create</Link>
                     </nav>
 
                     {/* Login + Hamburger */}

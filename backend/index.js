@@ -18,8 +18,6 @@ const User = require('./Models/UserModel')
 // -----------------------------
 
 const cors = require('cors')
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
 app.use(express.json());
 app.use(cors())
 
@@ -39,8 +37,11 @@ app.post('/verifiedvilla/create', async (req, res) => {
         price,
         image,
         location,
-        country
+        country,
+        owner: req.user
     })
+    console.log(req.body)
+    console.log(req.user)
     await newListing.save()
     res.json(newListing)
 })
@@ -84,14 +85,15 @@ app.post('/verifiedvilla/review/:id', async (req, res) => {
 
     listing.review.push(reviewListing._id);
     await listing.save();
-    const updatedListing = await Listing.findById(id).populate('review');
+    const updatedListing = await Listing.findById(id).populate('review')
 
     res.json(updatedListing);
 });
 
 // Details Listings
 app.get('/verifiedvilla/:id', async (req, res) => {
-    const Listings = await Listing.findById(req.params.id).populate('review')
+    const Listings = await Listing.findById(req.params.id).populate('review').populate('owner');
+    // console.log('Owner received:', req.params.id.owner);
     res.json(Listings)
 })
 
