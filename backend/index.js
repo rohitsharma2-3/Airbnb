@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
 const port = process.env.PORT || 4000
 const mongoDB = process.env.MONGODB_URL
@@ -11,6 +12,7 @@ const mongoDB = process.env.MONGODB_URL
 
 const Listing = require('./Models/ListingModel')
 const Review = require('./Models/ReviewModel')
+const User = require('./Models/UserModel')
 
 // -----------------------------
 
@@ -90,6 +92,35 @@ app.get('/verifiedvilla/:id', async (req, res) => {
     const Listings = await Listing.findById(req.params.id).populate('review')
     res.json(Listings)
 })
+
+app.post('/verifiedvilla/signup', async (req, res) => {
+    let check = await User.findOne({
+        email: req.body.email,
+    })
+
+    if (check) {
+        return res.json({
+            success: false,
+            errors: 'exiting user found with same email!'
+        })
+    }
+    const user = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    })
+    await user.save()
+
+    const data = {
+        user: {
+            id: user._id
+        }
+    }
+
+    const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '7d' })
+    res.json({ success: true })
+})
+
 
 app.listen(port, () => {
     console.log(`PORT is connected : http://localhost:${port}/VerifiedVilla`)
