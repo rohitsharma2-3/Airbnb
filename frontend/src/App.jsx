@@ -9,6 +9,7 @@ import Details from './Components/Details'
 import Update from './Components/Update.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Erro from './Components/Erro.jsx'
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
             <Route path='/login' element={<SignUp />} />
             <Route path='/details/:id' element={<Details />} />
             <Route path='/update/:id' element={<Update />} />
+            <Route path='*' element={<Erro />} />
           </Routes>
         </div>
         <Footer />

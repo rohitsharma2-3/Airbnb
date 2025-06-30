@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const Create = () => {
@@ -56,8 +56,17 @@ const Create = () => {
             price: ''
         })
     }
-    return (
-        <div className="mt-18 max-w-3xl mx-auto">
+
+    useEffect(() => {
+        const token = localStorage.getItem('auth-token');
+        if (!token) {
+            // If not logged in, redirect to login
+            navigate('/login');
+        }
+    }, []);
+    return (<>
+
+       <div className="mt-18 max-w-3xl mx-auto">
             <h2 className="text-xl font-semibold mb-6 ">Create Listings</h2>
             <form onSubmit={onSubmitHandler}>
                 <div className='mt-4'>
@@ -92,7 +101,8 @@ const Create = () => {
                     <span className="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase">Create</span>
                 </button>
             </form>
-        </div>
+        </div >
+    </>
     );
 };
 

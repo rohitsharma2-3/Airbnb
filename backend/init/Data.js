@@ -10,7 +10,7 @@ const sampleListings = [
     price: 1500,
     location: "Malibu",
     country: "United States",
-    category: "Home"
+    category: "Cities"
   },
   {
     title: "Modern Loft in Downtown",
@@ -114,7 +114,7 @@ const sampleListings = [
     price: 3000,
     location: "Verbier",
     country: "Switzerland",
-    category: "Swimming Pool"
+    category: "Beach"
   },
   {
     title: "Safari Lodge in the Serengeti",
@@ -127,7 +127,7 @@ const sampleListings = [
     price: 4000,
     location: "Serengeti National Park",
     country: "Tanzania",
-    category: "Home"
+    category: "Cities"
   },
   {
     title: "Historic Canal House",
@@ -231,7 +231,7 @@ const sampleListings = [
     price: 3000,
     location: "Phuket",
     country: "Thailand",
-    category: "Home"
+    category: "Cities"
   },
   {
     title: "Historic Castle in Scotland",
@@ -348,7 +348,7 @@ const sampleListings = [
     price: 6000,
     location: "Maldives",
     country: "Maldives",
-    category: "Home"
+    category: "Cities"
   },
   {
     title: "Ski Chalet in Aspen",
@@ -374,7 +374,7 @@ const sampleListings = [
     price: 1800,
     location: "Costa Rica",
     country: "Costa Rica",
-    category: "Home"
+    category: "Cities"
   },
 ];
 

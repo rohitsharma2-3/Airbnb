@@ -16,6 +16,16 @@ const SeeReview = () => {
             .catch((err) => console.log('Error -> ', err));
     };
 
+    const DelReview = async (listingId, reviewId) => {
+        try {
+            await axios.delete(`http://localhost:4000/verifiedvilla/review/${listingId}/${reviewId}`);
+            fetchListing(); 
+        } catch (err) {
+            console.error('Delete Error -> ', err);
+        }
+    }
+
+
     useEffect(() => {
         fetchListing();
     }, [id]);
@@ -28,7 +38,9 @@ const SeeReview = () => {
                     <h5 className='font-semibold text-lg mb-1'>User Review</h5>
                     <p className='text-sm mb-2 text-gray-700'>{review.review}</p>
                     <Rating value={review.rating} precision={0.5} readOnly /><br />
-                    <Button className='mt-3' variant="outlined" startIcon={<DeleteIcon />}>
+                    <Button className='mt-3' variant="outlined" startIcon={<DeleteIcon />} onClick={() => {
+                        DelReview(id, review._id);
+                    }}>
                         Delete
                     </Button>
                 </div>

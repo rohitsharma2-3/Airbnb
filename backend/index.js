@@ -14,6 +14,7 @@ const mongoDB = process.env.MONGODB_URL
 const Listing = require('./Models/ListingModel')
 const Review = require('./Models/ReviewModel')
 const User = require('./Models/UserModel')
+const Verify = require('./utils/Verify')
 
 // -----------------------------
 
@@ -38,10 +39,7 @@ app.post('/verifiedvilla/create', async (req, res) => {
         image,
         location,
         country,
-        owner: req.user
     })
-    console.log(req.body)
-    console.log(req.user)
     await newListing.save()
     res.json(newListing)
 })
@@ -90,10 +88,19 @@ app.post('/verifiedvilla/review/:id', async (req, res) => {
     res.json(updatedListing);
 });
 
+app.delete('/verifiedvilla/review/:listingId/:reviewId', async (req, res) => {
+    const { listingId, reviewId } = req.params;
+    await Review.findByIdAndDelete(reviewId);
+    await Listing.findByIdAndUpdate(listingId, {
+        $pull: { review: reviewId }
+    });
+    const updatedListing = await Listing.findById(listingId).populate('review');
+    res.json(updatedListing);
+});
+
 // Details Listings
 app.get('/verifiedvilla/:id', async (req, res) => {
     const Listings = await Listing.findById(req.params.id).populate('review').populate('owner');
-    // console.log('Owner received:', req.params.id.owner);
     res.json(Listings)
 })
 
@@ -123,7 +130,9 @@ app.post('/verifiedvilla/signup', async (req, res) => {
 
     const data = {
         user: {
-            id: user._id
+            _id: user._id,
+            name: user.name,
+            email: user.email
         }
     }
 
