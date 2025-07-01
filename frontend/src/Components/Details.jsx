@@ -5,12 +5,15 @@ import axios from 'axios'
 import Review from './Review'
 import SeeReview from './SeeReview'
 import { toast } from 'react-toastify'
+import { jwtDecode } from 'jwt-decode'
+const token = localStorage.getItem("auth-token");
 
 const Details = () => {
     let navigate = useNavigate()
     let location = useLocation()
     let { id } = useParams();
     const [Listing, setListings] = useState(null);
+    const [userId, setUser] = useState();
 
     const fetchListing = () => {
         axios.get(`http://localhost:4000/verifiedvilla/${id}`)
@@ -25,6 +28,18 @@ const Details = () => {
     useEffect(() => {
         fetchListing();
     }, [id]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("auth-token");
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                setUser(decoded.user.id); 
+            } catch (err) {
+                console.error("Invalid token");
+            }
+        }
+    }, []);
 
     useEffect(() => {
         if (location.state?.showToast) {
@@ -60,18 +75,21 @@ const Details = () => {
                 <p className="mt-4 text-xl text-indigo-600 font-semibold">₹ {Listing.price} / night</p>
                 <p className="text-gray-500 mt-2">{Listing.location}, {Listing.country}</p>
                 <div className='flex gap-10'>
-                    <Link to={`/update/${id}`}>
-                        <button className="group relative inline-block">
-                            <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-blue-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                    {Listing.owner?._id === userId ?
+                        <>
+                            <Link to={`/update/${id}`}>
+                                <button className="group relative inline-block">
+                                    <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-blue-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>
 
-                            <span className="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase">Update</span>
-                        </button>
-                    </Link>
-                    <button className="group relative inline-block " onClick={deleteHandler}>
-                        <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-red-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                                    <span className="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase">Update</span>
+                                </button>
+                            </Link>
+                            <button className="group relative inline-block " onClick={deleteHandler}>
+                                <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-red-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>
 
-                        <span className="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase">Delete</span>
-                    </button>
+                                <span className="relative inline-block border-2 border-current px-8 py-3 text-sm font-bold tracking-widest text-black uppercase">Delete</span>
+                            </button>
+                        </> : null}
                 </div>
                 {Listing && (
                     <>

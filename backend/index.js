@@ -14,7 +14,7 @@ const mongoDB = process.env.MONGODB_URL
 const Listing = require('./Models/ListingModel')
 const Review = require('./Models/ReviewModel')
 const User = require('./Models/UserModel')
-const Verify = require('./utils/Verify')
+const { verifyToken } = require('./utils/Verify')
 
 // -----------------------------
 
@@ -30,8 +30,8 @@ app.get('/verifiedvilla', async (req, res) => {
 })
 
 // Create Listings
-app.post('/verifiedvilla/create', async (req, res) => {
-    const { title, description, price, image, location, country } = req.body
+app.post('/verifiedvilla/create', verifyToken, async (req, res) => {
+    const { title, description, price, image, location, country, category } = req.body
     const newListing = new Listing({
         title,
         description,
@@ -39,7 +39,9 @@ app.post('/verifiedvilla/create', async (req, res) => {
         image,
         location,
         country,
+        category,
     })
+    newListing.owner = req.user.id
     await newListing.save()
     res.json(newListing)
 })
@@ -47,14 +49,15 @@ app.post('/verifiedvilla/create', async (req, res) => {
 // Update Listings
 app.put('/verifiedvilla/update/:id', async (req, res) => {
     let { id } = req.params
-    const { title, description, price, image, location, country } = req.body
+    const { title, description, price, image, location, country, category } = req.body
     const UpdListinng = await Listing.findByIdAndUpdate(id, {
         title,
         description,
         price,
         image,
         location,
-        country
+        country,
+        category
     },
         { new: true }
     )
@@ -107,38 +110,36 @@ app.get('/verifiedvilla/:id', async (req, res) => {
 app.post('/verifiedvilla/signup', async (req, res) => {
     const { name, email, password } = req.body;
 
-    let check = await User.findOne({
-        email: req.body.email,
-    })
-
-    if (check) {
-        return res.json({
-            success: false,
-            errors: 'exiting user found with same email!'
-        })
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new User({
-        name,
-        email,
-        password: hashedPassword,
-    })
-
-    await user.save()
-
-    const data = {
-        user: {
-            _id: user._id,
-            name: user.name,
-            email: user.email
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists with this email.',
+            });
         }
-    }
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '7d' })
-    res.json({ success: true, token });
-})
+        const user = new User({
+            name,
+            email,
+            password: hashedPassword,
+        });
+        await user.save();
+
+        const payload = {
+            user: {
+                id: user._id,
+            },
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+        res.status(201).json({ success: true, token });
+    } catch (error) {
+        console.error('Signup Error:', error);
+        res.status(500).json({ success: false, message: 'Server error during signup.' });
+    }
+});
 
 app.post('/verifiedvilla/login', async (req, res) => {
     let user = await User.findOne({

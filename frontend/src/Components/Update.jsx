@@ -13,6 +13,7 @@ const Update = () => {
         location: '',
         country: '',
         price: '',
+        category: '',
     })
 
     const inputHandler = (e) => {
@@ -39,6 +40,7 @@ const Update = () => {
                     location: '',
                     country: '',
                     price: '',
+                    category: '',
                 })
                 navigate(`/details/${id}`, {
                     state: {
@@ -88,6 +90,13 @@ const Update = () => {
                 <div className='mt-4'>
                     <label htmlFor="price" className='' >Price:</label>
                     <input type="number" placeholder='Enter price' name='price' value={inputData.price} onChange={inputHandler} id='price' className='border px-1 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-1' />
+                </div>
+                <div className='mt-4'>
+                    <label htmlFor="category">Category</label>
+                    <input type="text" placeholder='Enter category' name='category' value={inputData.category} onChange={inputHandler} className='border px-1 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-2' />
+                    <datalist>
+                        <option value="">Trending</option>
+                    </datalist>
                 </div>
                 <button className="group relative inline-block mt-4">
                     <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-blue-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>

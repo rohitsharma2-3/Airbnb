@@ -13,7 +13,8 @@ const Create = () => {
         },
         location: '',
         country: '',
-        price: ''
+        price: '',
+        category: ''
     });
 
     const inputHandler = (e) => {
@@ -29,7 +30,11 @@ const Create = () => {
         e.preventDefault()
         console.log(inputData)
 
-        axios.post(`http://localhost:4000/verifiedvilla/create`, inputData)
+        axios.post(`http://localhost:4000/verifiedvilla/create`, inputData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('auth-token')}`
+            }
+        })
             .then((res) => {
                 console.log(res.data);
                 navigate('/', {
@@ -53,7 +58,8 @@ const Create = () => {
             },
             location: '',
             country: '',
-            price: ''
+            price: '',
+            category: ''
         })
     }
 
@@ -66,8 +72,8 @@ const Create = () => {
     }, []);
     return (<>
 
-       <div className="mt-18 max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold mb-6 ">Create Listings</h2>
+        <div className="mt-18 max-w-3xl mx-auto p-3">
+            <h2 className="text-xl font-semibold mb-6">Create Listings</h2>
             <form onSubmit={onSubmitHandler}>
                 <div className='mt-4'>
                     <label htmlFor="title">Title</label>
@@ -94,6 +100,13 @@ const Create = () => {
                 <div className='mt-4'>
                     <label htmlFor="price">Price</label>
                     <input type="number" placeholder='Enter price' name='price' value={inputData.price} onChange={inputHandler} className='border px-1 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-2' />
+                </div>
+                <div className='mt-4'>
+                    <label htmlFor="category">Category</label>
+                    <input type="text" placeholder='Enter category' name='category' value={inputData.category} onChange={inputHandler} className='border px-1 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-2' />
+                    <datalist>
+                        <option value="">Trending</option>
+                    </datalist>
                 </div>
                 <button className="group relative inline-block mt-4">
                     <span className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-blue-600 transition-transform group-hover:translate-x-0 group-hover:translate-y-0"></span>

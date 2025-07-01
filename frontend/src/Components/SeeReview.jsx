@@ -25,10 +25,9 @@ const SeeReview = () => {
         }
     }
 
-
     useEffect(() => {
         fetchListing();
-    }, [id]);
+    }, []);
 
 
     return (
