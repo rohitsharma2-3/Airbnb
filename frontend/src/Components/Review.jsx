@@ -22,7 +22,7 @@ const Review = () => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault()
-        axios.post(`http://localhost:4000/verifiedvilla/review/${id}`, inputData)
+        axios.post(`https://airbnb-8dy1.onrender.com/verifiedvilla/review/${id}`, inputData)
             .then(() => {
                 setInputData({
                     review: '',
