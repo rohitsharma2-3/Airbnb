@@ -27,7 +27,7 @@ const SignUp = () => {
 
   const signUpFun = async () => {
     try {
-      const res = await fetch('http://localhost:4000/verifiedvilla/signup', {
+      const res = await fetch('https://airbnb-8dy1.onrender.com/verifiedvilla/signup', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -59,7 +59,7 @@ const SignUp = () => {
 
   const loginFun = async () => {
     let respData;
-    await fetch('http://localhost:4000/verifiedvilla/login', {
+    await fetch('https://airbnb-8dy1.onrender.com/verifiedvilla/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
