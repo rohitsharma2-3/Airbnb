@@ -30,7 +30,7 @@ const Update = () => {
         e.preventDefault()
         console.log(inputData)
 
-        axios.put(`http://localhost:4000/verifiedvilla/update/${id}`, inputData)
+        axios.put(`https://airbnb-8dy1.onrender.com/verifiedvilla/update/${id}`, inputData)
             .then((res) => {
                 console.log(res.data)
                 setInputData({
@@ -56,7 +56,7 @@ const Update = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/verifiedvilla/${id}`)
+        axios.get(`https://airbnb-8dy1.onrender.com/verifiedvilla/${id}`)
             .then((res) => {
                 setInputData(res.data)
             })
