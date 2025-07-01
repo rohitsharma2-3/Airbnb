@@ -30,7 +30,7 @@ const Create = () => {
         e.preventDefault()
         console.log(inputData)
 
-        axios.post(`http://localhost:4000/verifiedvilla/create`, inputData, {
+        axios.post(`https://airbnb-8dy1.onrender.com/verifiedvilla/create`, inputData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('auth-token')}`
             }
