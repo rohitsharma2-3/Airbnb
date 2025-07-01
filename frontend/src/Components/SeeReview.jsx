@@ -11,14 +11,14 @@ const SeeReview = () => {
     const [listing, setListing] = useState(null);
 
     const fetchListing = () => {
-        axios.get(`http://localhost:4000/verifiedvilla/${id}`)
+        axios.get(`https://airbnb-8dy1.onrender.com/verifiedvilla/${id}`)
             .then((res) => setListing(res.data))
             .catch((err) => console.log('Error -> ', err));
     };
 
     const DelReview = async (listingId, reviewId) => {
         try {
-            await axios.delete(`http://localhost:4000/verifiedvilla/review/${listingId}/${reviewId}`);
+            await axios.delete(`https://airbnb-8dy1.onrender.com/verifiedvilla/review/${listingId}/${reviewId}`);
             fetchListing(); 
         } catch (err) {
             console.error('Delete Error -> ', err);
