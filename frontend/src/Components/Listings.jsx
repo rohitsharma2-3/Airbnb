@@ -11,7 +11,7 @@ const Listings = () => {
   const location = useLocation()
 
   useEffect(() => {
-    axios.get('http://localhost:4000/verifiedvilla')
+    axios.get('https://airbnb-8dy1.onrender.com/verifiedvilla')
       .then((res) => {
         setInitData(res.data)
       })
