@@ -16,7 +16,7 @@ const Details = () => {
     const [userId, setUser] = useState();
 
     const fetchListing = () => {
-        axios.get(`http://localhost:4000/verifiedvilla/${id}`)
+        axios.get(`https://airbnb-8dy1.onrender.com/verifiedvilla/${id}`)
             .then((res) => {
                 setListings(res.data);
             })
@@ -49,7 +49,7 @@ const Details = () => {
     }, [location])
 
     const deleteHandler = () => {
-        axios.delete(`http://localhost:4000/verifiedvilla/delete/${id}`)
+        axios.delete(`https://airbnb-8dy1.onrender.com/verifiedvilla/delete/${id}`)
             .then((res) => {
                 setListings(res.data)
                 navigate('/', {
